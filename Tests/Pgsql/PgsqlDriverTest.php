@@ -1275,24 +1275,30 @@ class PgsqlDriverTest extends PgsqlCase
 		$union1 = self::$driver->getQuery(true);
 		$union2 = self::$driver->getQuery(true);
 
-		$union1->select('id, title')->from('dbtest')->where('id = 4')->setLimit(1);
+		$union1->select(self::$driver->quoteName(array('id', 'title')))
+			->from(self::$driver->quoteName('dbtest'))
+			->where(self::$driver->quoteName('id') . ' = 4')
+			->setLimit(1);
 
-		$union2->select('id, title')->from('dbtest')->where('id < 4')->order('id DESC');
-		$union2->setLimit(2, 1);
+		$union2->select(self::$driver->quoteName(array('id', 'title')))
+			->from(self::$driver->quoteName('dbtest'))
+			->where(self::$driver->quoteName('id') . ' < 4')
+			->order(self::$driver->quoteName('id') . ' DESC')
+			->setLimit(2, 1);
 
-		$query->querySet($union1)->unionAll($union2)->order('id');
+		$query->querySet($union1)
+			->unionAll($union2)
+			->order(self::$driver->quoteName('id'));
 
 		$result = self::$driver->setQuery($query, 0, 3)->loadAssocList();
 
-		$this->assertThat(
-			$result,
-			$this->equalTo(
-				array(
-					array('id' => '1', 'title' => 'Testing'),
-					array('id' => '2', 'title' => 'Testing2'),
-					array('id' => '4', 'title' => 'Testing4'),
-				)
+		$this->assertEquals(
+			array(
+				array('id' => '1', 'title' => 'Testing'),
+				array('id' => '2', 'title' => 'Testing2'),
+				array('id' => '4', 'title' => 'Testing4'),
 			),
+			$result,
 			__LINE__
 		);
 	}
