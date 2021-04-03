@@ -536,7 +536,7 @@ abstract class DatabaseQuery implements QueryInterface
 			throw new QueryTypeAlreadyDefinedException(
 				\sprintf(
 					'Cannot set the query type to "call" as the query type is already set to "%s".'
-						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					. ' You should either call the `clear()` method to reset the type or create a new query object.',
 					$this->type
 				)
 			);
@@ -947,7 +947,7 @@ abstract class DatabaseQuery implements QueryInterface
 			throw new QueryTypeAlreadyDefinedException(
 				\sprintf(
 					'Cannot set the query type to "delete" as the query type is already set to "%s".'
-						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					. ' You should either call the `clear()` method to reset the type or create a new query object.',
 					$this->type
 				)
 			);
@@ -1027,7 +1027,7 @@ abstract class DatabaseQuery implements QueryInterface
 			throw new QueryTypeAlreadyDefinedException(
 				\sprintf(
 					'Cannot set the query type to "exec" as the query type is already set to "%s".'
-						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					. ' You should either call the `clear()` method to reset the type or create a new query object.',
 					$this->type
 				)
 			);
@@ -1298,7 +1298,7 @@ abstract class DatabaseQuery implements QueryInterface
 			throw new QueryTypeAlreadyDefinedException(
 				\sprintf(
 					'Cannot set the query type to "insert" as the query type is already set to "%s".'
-						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					. ' You should either call the `clear()` method to reset the type or create a new query object.',
 					$this->type
 				)
 			);
@@ -1487,8 +1487,8 @@ abstract class DatabaseQuery implements QueryInterface
 		if ($this->nullDatetimeList)
 		{
 			return "($column IN ("
-			. implode(', ', $this->db->quote($this->nullDatetimeList))
-			. ") OR $column IS NULL)";
+				. implode(', ', $this->db->quote($this->nullDatetimeList))
+				. ") OR $column IS NULL)";
 		}
 
 		return "$column IS NULL";
@@ -1675,7 +1675,7 @@ abstract class DatabaseQuery implements QueryInterface
 			throw new QueryTypeAlreadyDefinedException(
 				\sprintf(
 					'Cannot set the query type to "select" as the query type is already set to "%s".'
-						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					. ' You should either call the `clear()` method to reset the type or create a new query object.',
 					$this->type
 				)
 			);
@@ -1787,7 +1787,7 @@ abstract class DatabaseQuery implements QueryInterface
 			throw new QueryTypeAlreadyDefinedException(
 				\sprintf(
 					'Cannot set the query type to "update" as the query type is already set to "%s".'
-						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					. ' You should either call the `clear()` method to reset the type or create a new query object.',
 					$this->type
 				)
 			);
@@ -2098,6 +2098,9 @@ abstract class DatabaseQuery implements QueryInterface
 		{
 			$parameterNames[] = ':preparedArray' . (++$this->preparedIndex);
 		}
+
+		// In the bind method, we expect $values in a zero-index array, so array_values is needed here
+		$values = array_values($values);
 
 		$this->bind($parameterNames, $values, $dataType);
 
